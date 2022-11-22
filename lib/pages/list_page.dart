@@ -18,8 +18,27 @@ class ListPage extends StatelessWidget {
       ]),
       body: ListView.builder(
         itemCount: context.watch<TaskProvider>().tasks.length,
-        itemBuilder: (context, index) =>
-            Text(context.watch<TaskProvider>().tasks[index]),
+        itemBuilder: (context, index) => Card(
+          child: Row(
+            children: [
+              Checkbox(
+                  value: context.watch<TaskProvider>().tasks[index].isComplete,
+                  onChanged: (value) {
+                    context.read<TaskProvider>().changeTaskStutsByIndex(index);
+                  }),
+              Text(context.watch<TaskProvider>().tasks[index].text),
+              Spacer(),
+              IconButton(
+                onPressed: context.watch<TaskProvider>().tasks[index].isComplete
+                    ? () {
+                        context.read<TaskProvider>().deleteTask(index);
+                      }
+                    : null,
+                icon: Icon(Icons.delete),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
